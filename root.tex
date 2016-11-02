@@ -1,0 +1,86 @@
+%Dette er rootfilen til oppgaven: root.tex
+
+%%========================================
+\documentclass[12pt]{report}
+%\usepackage[norsk]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{ramsstyle}
+\usepackage{parskip}
+\usepackage{graphicx}
+\graphicspath{ {pictures/} {pictures/guipictures/} }
+\usepackage{array}
+\usepackage{cleveref}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage[titletoc,title]{appendix}
+\usepackage{paralist}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+% \usepackage[a-1b]{pdfx}
+% \usepackage{hyperref}
+\usepackage{comment}
+
+
+%\addto{\captionsnorsk}{\renewcommand*{\appendixname}{Vedlegg}}
+
+\usepackage[backend=biber]{biblatex}
+%\addbibresource{referanser.bib}
+
+% \usepackage{fancyhdr}
+% % \usepackage{lipsum} % only for showing some sample text
+% \fancyhf{} % clear all header and footers
+% \renewcommand{\headrulewidth}{0pt} % remove the header rule
+% \rfoot{\thepage}
+%%========================================
+
+
+%%========================================
+\begin{document}
+
+\title{Project in sensor systems}
+\author{Torbjørn Helmersen}
+\date{Autumn 2016\\ Department of technology \\ Norwegian University of Science and Technology\\and\\ Mid Sweden University}
+
+
+\maketitle
+
+\include{preface}
+
+%%\pagenumbering{roman}
+\setcounter{page}{1}
+\tableofcontents
+\pagenumbering{arabic}
+
+\include{Introduction}
+
+\include{Kapittel1}
+\include{Kapittel2}
+\include{Kapittel3}
+\include{Kapittel4}
+\include{conclusion}
+
+
+
+\begin{appendices}
+
+
+\include{attachments/stepbystep}
+
+\include{attachments/Res_t1}
+\include{attachments/Res_t2}
+\include{attachments/Res_t3}
+    
+\include{attachments/Thorlabs-eq}
+
+\include{attachments/LabLight_HW_v.1.1}
+\include{attachments/LabLight_FW_v.1.1}
+
+
+
+\end{appendices}
+
+
+
+\end{document}
+

@@ -1,0 +1,153 @@
+%%Dette er kapittel 1 Dette er IMAQ
+%%=================================================================
+\begin{comment}
+\chapter{Image Acquisition} 
+
+\section{Program}
+
+At this state of the project the Glucoset software is not fully automatic. The user have to manually perform a few steps to get a result. In the following chapter contents of the Glucoset software will be described and the steps for an successful measurement of the droplet size will be explained in a step-by-step manual.
+
+
+
+\section{Image Acquisition} 
+
+The first part of the Glucoset program is used for the image acquisition from the camera. By using the IMAQdx package from LabVIEW live pictures are imported from the camera into the Glucoset software. The block diagram is shown in Figure \ref{img:Imaq}.
+
+\newpage
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.35]{ImageAcquisition}
+	\caption{LabVIEW block diagram: Image Acquisition}
+	\label{img:Imaq}
+\end{figure}
+
+It is possible to control different parameters of the camera directly out of the LabVIEW interface. As default, the camera don't give us gray-scaled pictures. Since we choose an algorithm for calculating the drop-volume, in which thresholding is an essential part, we need a grey-scaled image. With the property nodes of the IMAQdx we configure the PixelFormat attribute in the way, that the images are gray-scaled. Furthermore it is possible to modify the ExposureTime attribute of the camera, which can be useful to configure the light environment.
+At first the user have only to choose the camera in the LabVIEW interface and click play. Afterwards the live pictures will be displayed in gray-scale in the user interface like shown in Figure \ref{img:pictureGreyscaled}.  
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{greyscaled_picture}
+	\caption{Greyscaled picture from the camera}
+	\label{img:pictureGreyscaled}
+\end{figure}
+
+\subsection{Threshold}
+
+With the VI "IMAQ Local Threshold" the gray-scaled picture will be converted into a binary picture in black and white. This binary picture will be needed for the calculation of the droplet volume (See Figure \ref{img:pictureThresholded})
+
+
+The block diagram is shown in Figure \ref{img:threshold}.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{Thresholding}
+	\caption{LabVIEW block diagram: Thresholding}
+	\label{img:threshold}
+\end{figure} 
+
+By using this VI we can choose different options for the threshold process. 
+For this VI the method "Background correction" should be used. This option performs background correction to eliminate non-uniform lighting effects and then performs threshold using the interclass variance threshold algorithm. (LabVIEW Documentation)
+
+We want to find the edge of the cut fiber-cable. The fiber-cable will be gray-scaled while the background will be white because of the light source which is behind the fiber-cable. By using "Look for dark objects" option in the threshold VI the fiber-cable will be displayed in black. 
+The "Window size" option is a cluster specifying the size of the window which the VI uses when calculating a local threshold. The best results will be reached with a value of 128x128.
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{thresholded_picture}
+	\caption{Thresholded picture from the camera}
+	\label{img:pictureThresholded}
+\end{figure}
+
+
+\subsection{Edge detection without droplet}
+
+To determine the edges of the fiber-cable (bottom, left, right) we are using the "IMAQ Rake 3" VI. With this VI it is possible to find the left and right edge of the fiber-cable. To determine the bottom, the last pixel of the edges is used. 
+In the Figure \ref{img:edgedetection} this VI is in the upper left corner. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{EdgeDetection}
+	\caption{LabVIEW block diagram: Edgedetection}
+	\label{img:edgedetection}
+\end{figure} 
+
+The ROI Descriptor is used to create a rectangle in which the edges will be searched. Both for-loops are used to find the true left and right edge in case of disturbances in the picture. With this VI we can calculate the width of the fiber-cable and by assuming the width to be 125µm we can calculate the ratio of µm/px.
+The calculated width from the picture will be displayed in the user interface. 
+
+\subsubsection{Mask creation}
+
+After the edge detection is completed the mask for the fiber-cable will be created. This mask is a rectangle which will be used to mask the whole area above the bottom of the cut fiber-cable. 
+For this we are using the "IMAQ ROIToMask 2" VI. With the edge detection step before we create a ROI Descriptor for the VI with the determined edges. 
+Afterwards the mask will be saved as a picture on the disk. The block diagram is shown in Figure \ref{img:MaskCreation}.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{MaskCreation}
+	\caption{LabVIEW block diagram: Mask creation}
+	\label{img:MaskCreation}
+\end{figure} 
+
+
+\subsubsection{Droplet calculation}
+
+When the mask is created and the droplet afterwards is generated, the droplet calculation can begin. For this we add the mask on the picture of the fiber-cable with the droplet. 
+As a result only the droplet is visible because the fibre-cable is masked. (See Figure \ref{img:maskedPicture})
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{maskedPicture}
+	\caption{Masked threshold from the camera}
+	\label{img:maskedPicture}
+\end{figure}
+
+In order to calculate the volume of the droplet we are using the "Particle Report" VI. With this VI we can determine all particles in the picture. The block diagram for the particle report is shown in Figure \ref{img:particlereport}.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{ParticleReport}
+	\caption{LabVIEW block diagram: Particle Report}
+	\label{img:particlereport}
+\end{figure} 
+
+
+By using a for-loop to determine the biggest particle (it is possible that some disturbance pixels are in the picture) we can choose the droplet particle. The detected droplet will be displayed in the User interface. (Like Figure \ref{img:detectedDroplet})
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{detectedDroplet}
+	\caption{Detected droplet from the Particle Report VI}
+	\label{img:detectedDroplet}
+\end{figure}
+
+The Dimension of the droplet (in pixels) will be used to calculate the volume of the droplet as its shown in the Figure \ref{img:volumecalculating}. The "width of the fiber cable in pixeln"-attribute at the picture is used to convert the amount of pixel in microns. This attribute was calculated in the edge detection step.   
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics{CalculatingVolume}
+	\caption{LabVIEW block diagram: Volume Calculation}
+	\label{img:volumecalculating}
+\end{figure} 
+
+The equation we used for the calculations of the volume was:
+\begin{equation}
+V=\frac{\pi h}{6}\left(3\left(\frac{d}{2}\right)^2+h^2\right) 
+\end{equation}
+Where V = volume of the droplet, h = height of the droplet from the fiber to the tip of the droplet and d = diameter or width of the droplet.
+
+\newpage
+\subsubsection{Overview}
+
+At Figure \ref{img:OverviewCompleteProgram} you can see the whole LabVIEW block diagram.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{OverviewCompleteProgram}
+	\caption{Overview of the block diagram}
+	\label{img:OverviewCompleteProgram}
+\end{figure} 
+
+	
+\end{comment}

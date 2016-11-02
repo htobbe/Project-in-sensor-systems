@@ -1,0 +1,105 @@
+%
+% Må gjerne flyttes/endres på osv
+% Samle et kapittel for testplatformen? Med soft- og hardware?
+%
+\begin{comment} 
+\chapter{Test Platform}
+
+
+\section{Control Software}
+
+To be able to automate a sequence of measurements a control GUI was created in LabVIEW.
+
+
+\subsection{Motor Controls}
+
+There are two options available to control the motors from LabVIEW. One low-level method by sending binary commands directly to the motor serial port, this requires manually constructed command packages and a robust read and write system for transmission.
+Another method is using a third-party ActiveX component which runs in the background (\cref{fig:thorlabsAPT}), this software is provided for free by Thorlabs. This solution enables the use of ActiveX properties within LabVIEW and was therefore chosen.
+%, and since a cross-platform end product was not a requirement this solution was chosen.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{Thorlabs_APT_config}
+	\caption{Thorlabs APT software in simulator mode.}
+	\label{fig:thorlabsAPT}
+\end{figure}
+
+
+The ActiveX component contributed to some stability issues regarding the connection to the motors, and it also makes this control software platform dependent. But it has a built in simulator and preset command properties which makes development and debugging a lot easier.
+
+
+\subsection{Control Interface}
+
+When the control interface initiates a configuration window as shown in \cref{fig:confguiv1} will be visible. The configuration requires the motor serial numbers for all three axis, the serial port source for the light control and the camera port source. The latter two is optional in current version.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{GlucosetGUI_conf_v1}
+	\caption{Configuration GUI}
+	\label{fig:confguiv1}
+\end{figure}
+
+Each serial number input has an indicator next to it that turns light green (on) when the motor is connected correctly. When all three motors are connected the main control window as shown in \cref{fig:mainguiv1} is made available. 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{GlucosetGUI_main_v1}
+	\caption{Main control GUI}
+	\label{fig:mainguiv1}
+\end{figure}
+
+The left side in the main window contains the manual motor controls. Where it is possible to set the maximum motor velocity, acceleration and position of the Z-axis (axis that holds the fiber optics).
+
+A jogging panel is provided to easily control all three axis of the test platform. The ``Go Home'' function will send the linear stages to their home position, default is $0.000$ which is the beginning of the stage. And the ``Set Home'' function is supposed to set current position as home, but this functionality is not yet implemented.
+
+
+\subsection{Test Run Configuration}
+
+The right side of the main window contains the test procedure settings.
+
+``Start Position'' (\cref{fig:testprocstart}) is the Z-axis position before and after a completed test run. This position is added for maintenance of the fiber optic when a test sequence is complete.
+
+``Camera Position'' (\cref{fig:testproccam}), where the image acquisition is being done, and ``Stop Position'' (\cref{fig:testprocstop}) is the positions the test will switch between in a test run.
+
+The test run behavior is configured by setting the start velocity, velocity increment and stop velocity where the test run is considered complete. A delay at the stop position can also be added if necessary.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.33\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{start_pos}
+        \caption{Start Position}
+        \label{fig:testprocstart}
+    \end{subfigure}%
+    \begin{subfigure}{0.33\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{cam_pos}
+        \caption{Camera Position}
+        \label{fig:testproccam}
+    \end{subfigure}%
+    \begin{subfigure}{0.33\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{stop_pos}
+        \caption{Stop Position}
+        \label{fig:testprocstop}
+    \end{subfigure}
+    \caption{Test sequence positions}
+    \label{fig:testprocstages}
+\end{figure}
+
+
+
+\subsection{Current Status}
+
+While this first version of the control software works, both manual motor control and the test procedure as described above, it has not been tested in combination with the IMAQ system. The fiber optic requires a manual cleansing between each take, and this user controlled pause has not been implemented.
+
+A more complete version of the interface, as shown in \cref{fig:mainguiv2}, was in development. But due to time constrains of this project and difficulties with the automation of the IMAQ-system the development was halted. 
+
+
+\begin{figure}[h!]
+    \centering
+	\includegraphics[width=0.9\textwidth]{GlucosetGUI_main_v2}
+	\caption{Main control GUI, second version}
+	\label{fig:mainguiv2}
+\end{figure}
+\end{comment}

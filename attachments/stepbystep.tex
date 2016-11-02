@@ -1,0 +1,35 @@
+\begin{comment}
+\chapter{Step by Step manual for the user} \label{cha:Test procedure}
+
+\section{Step by Step manual for the user} 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.4]{UserInterface}
+	\caption{User Interface}
+	\label{img:UserInterface}
+\end{figure} 
+
+\newpage
+\renewcommand{\labelenumi}{\Roman{enumi}.}
+\begin{enumerate}
+\item Select the camera name in the User interface which should be used for the droplet detection. 
+\item Select the COM-port which is used for the light control.
+\item Run the VI.
+\item Drive the fiber-cable in a fix exact position in the scope of the camera by using Thorlabs APT User. Remember the position.
+\item Adjust the focus for sharp edges. 
+\item Choose the threshold options:
+
+\begin{itemize}
+\item Look for: Dark options
+\item Method: Background
+\item Window Size: 128x128
+\end{itemize}
+							
+\item Press "Detect without droplet". (This will save the picture on your disk and the mask will be created)
+\item Drive the fiber-cable down to create a droplet and drive it back exactly in the remembered position. 
+\item Press "Detect with droplet" (This picture will be saved)
+\item Press "Use Mask"
+\item Press "Find particles" (Calculation of the volume) 
+\end{enumerate}
+\end{comment}
